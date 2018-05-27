@@ -197,7 +197,11 @@ CLASS;
 
     public function {{method}}({{signature}})
     {
-        return $this->getClientMock()->{{method}}({{args}});
+        if (version_compare(PHP_VERSION, '7.1', '>=')) {
+            return call_user_func_array(array($this->getClientMock(), '{{method}}'), func_get_args());
+        } else {
+            return $this->getClientMock()->{{method}}({{args}});
+        }
     }
 METHOD;
 
